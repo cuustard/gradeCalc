@@ -3,13 +3,16 @@ var userPercent = [];
 
 document.addEventListener("DOMContentLoaded", function () {
 	const courseWorkInput = document.getElementById("courseWorkMark");
-	const courseWorkInputManual = document.getElementById("courseWorkMarkManual");
 	const examInput = document.getElementById("examMark");
-	const examInputManual = document.getElementById("examMarkManual");
+	const courseWorkMarkSpan = document.getElementById("courseworkMarkSpan");
+    const examMarkSpan = document.getElementById("examMarkSpan");
 	const result = {};
 	const courseWorkPercent = {};
 	const examPercent = {};
 	const totalPercent = {};
+
+	courseWorkInput.addEventListener("input", calculateGrade);
+	examInput.addEventListener("input", calculateGrade);
 
 	["2017", "2018", "2019", "2020", "2021", "2022", "2023"].forEach((year) => {
 		result[year] = document.getElementById(`result${year}`);
@@ -100,6 +103,8 @@ document.addEventListener("DOMContentLoaded", function () {
 		// Write the percentages to the elements with IDs 'courseworkPercent' and 'examPercent'
 		document.getElementById("courseworkPercent").textContent = `${courseWorkPercentValue.toFixed(2)}%`;
 		document.getElementById("examPercent").textContent = `${examPercentValue.toFixed(2)}%`;
+		courseWorkMarkSpan.textContent = courseWorkMarkValue + "/70";
+        examMarkSpan.textContent = examMarkValue + "/280";
 
 		for (let year in result) {
 			let overallGrade;
@@ -115,31 +120,11 @@ document.addEventListener("DOMContentLoaded", function () {
 			userPercent.push(parseFloat(totalPercent[year].textContent));
 			result[year].textContent = getGrade(overallGrade, year);
 		}
-
-		console.log(userPercent); // Log userPercent array to the console
 		if (chart) {
 			chart.data.datasets[chart.data.datasets.length - 1].data = [...userPercent];
 			chart.update("none");
 		}
 	}
-
-	function syncValues(input1, input2) {
-		input1.addEventListener("input", function () {
-			input2.value = this.value;
-			calculateGrade();
-		});
-	}
-
-	[courseWorkInput, courseWorkInputManual, examInput, examInputManual].forEach((input) => {
-		syncValues(
-			input,
-			input === courseWorkInput || input === courseWorkInputManual ? courseWorkInputManual : examInputManual
-		);
-		input.addEventListener("input", function (e) {
-			const max = input === courseWorkInput || input === courseWorkInputManual ? 70 : 280;
-			e.target.value = Math.max(0, Math.min(max, e.target.value));
-		});
-	});
 });
 
 // PLOTTING
@@ -165,13 +150,6 @@ chart = new Chart(ctx, {
 	data: {
 		labels: years,
 		datasets: [
-			...grades.map((grade, i) => ({
-				label: grade,
-				data: data[i],
-				fill: false,
-				borderColor: colors[i % colors.length],
-				tension: 0,
-			})),
 			{
 				label: "User Results",
 				data: userPercent,
@@ -179,6 +157,13 @@ chart = new Chart(ctx, {
 				borderColor: "black",
 				tension: 0,
 			},
+			...grades.map((grade, i) => ({
+				label: grade,
+				data: data[i],
+				fill: false,
+				borderColor: colors[i % colors.length],
+				tension: 0,
+			})),
 		],
 	},
 	options: {

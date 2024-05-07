@@ -8,14 +8,6 @@
     <link rel="stylesheet" href="gradeCalc.css">
 </head>
 
-<style>
-    #myChart {
-        width: 800px;
-        /* Set the width of the graph */
-        height: 400px;
-        /* Set the height of the graph */
-    }
-</style>
 
 <body>
     <h1>A-Level OCR Computer Science Grade Calculator</h1>
@@ -27,16 +19,14 @@
     <table>
         <tr>
             <td>Coursework Mark:</td>
-            <td><input type="range" min="0" max="70" value="35" step="1" id="courseWorkMark" name="courseWorkMark"></td>
-            <td><input type="number" min="0" max="70" value="35" step="1" id="courseWorkMarkManual"
-                    name="courseWorkMarktManual"><span>/70</span></td>
+            <td><input type="range" min="0" max="70" value="35" step="1" id="courseWorkMark" name="courseWorkMark"><span
+                    id="courseworkMarkSpan"></span></td>
             <td><span id="courseworkPercent"></span></td>
         </tr>
         <tr>
             <td>Exam Mark:</td>
-            <td><input type="range" min="0" max="280" value="140" step="1" id="examMark" name="examMark"></td>
-            <td><input type="number" min="0" max="280" value="140" step="1" id="examMarkManual"
-                    name="examMark"><span>/280</span></td>
+            <td><input type="range" min="0" max="280" value="140" step="1" id="examMark" name="examMark"><span
+                    id="examMarkSpan"></span></td>
             <td><span id="examPercent"></span></td>
         </tr>
     </table>
