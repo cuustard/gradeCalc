@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		console.log(userPercent); // Log userPercent array to the console
 		if (chart) {
 			chart.data.datasets[chart.data.datasets.length - 1].data = [...userPercent];
-			chart.update();
+			chart.update("none");
 		}
 	}
 
