@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const courseWorkInput = document.getElementById("courseWorkMark");
 	const examInput = document.getElementById("examMark");
 	const courseWorkMarkSpan = document.getElementById("courseworkMarkSpan");
-    const examMarkSpan = document.getElementById("examMarkSpan");
+	const examMarkSpan = document.getElementById("examMarkSpan");
 	const result = {};
 	const courseWorkPercent = {};
 	const examPercent = {};
@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		document.getElementById("courseworkPercent").textContent = `${courseWorkPercentValue.toFixed(2)}%`;
 		document.getElementById("examPercent").textContent = `${examPercentValue.toFixed(2)}%`;
 		courseWorkMarkSpan.textContent = courseWorkMarkValue + "/70";
-        examMarkSpan.textContent = examMarkValue + "/280";
+		examMarkSpan.textContent = examMarkValue + "/280";
 
 		for (let year in result) {
 			let overallGrade;
@@ -121,8 +121,8 @@ document.addEventListener("DOMContentLoaded", function () {
 			result[year].textContent = getGrade(overallGrade, year);
 		}
 		if (chart) {
-			chart.data.datasets[chart.data.datasets.length - 1].data = [...userPercent];
-			chart.update("none");
+			chart.data.datasets[0].data = [...userPercent];
+			chart.update();
 		}
 	}
 });
