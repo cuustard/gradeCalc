@@ -141,6 +141,36 @@ var data = [
 	[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
 ];
 
+function calculateAverageGradeBoundaries(data) {
+	var averages = data.map((gradeData) => {
+		var total = gradeData.reduce((sum, value) => sum + value, 0);
+		var average = total / gradeData.length;
+		return Array(gradeData.length).fill(parseFloat(average.toFixed(2)));
+	});
+
+	return averages;
+}
+
+var averageGradeBoundaries = calculateAverageGradeBoundaries(data);
+console.log(averageGradeBoundaries);
+
+function calculateAverageGradeBoundariesExcluding(data, excludeYears) {
+	var yearIndices = excludeYears.map((year) => years.indexOf(year));
+
+	var averages = data.map((gradeData) => {
+		var filteredData = gradeData.filter((_, index) => !yearIndices.includes(index));
+		var total = filteredData.reduce((sum, value) => sum + value, 0);
+		var average = total / filteredData.length;
+		return Array(gradeData.length).fill(parseFloat(average.toFixed(2)));
+	});
+
+	return averages;
+}
+
+var excludeYears = [2020, 2021];
+var averageGradeBoundariesExcluding = calculateAverageGradeBoundariesExcluding(data, excludeYears);
+console.log(averageGradeBoundariesExcluding);
+
 var ctx = document.getElementById("myChart").getContext("2d");
 
 var colors = ["green", "lime ", "yellow", "orange", "orangered", "red", "darkred"];
@@ -184,4 +214,92 @@ chart = new Chart(ctx, {
 			},
 		},
 	},
+});
+
+document.getElementById("averageBoundaries").addEventListener("change", function () {
+	if (this.checked) {
+		// The checkbox is checked, show the average boundaries
+		chart.data.datasets = [
+			{
+				label: "User Results",
+				data: userPercent,
+				fill: false,
+				borderColor: "black",
+				tension: 0,
+			},
+			...grades.map((grade, i) => ({
+				label: grade,
+				data: averageGradeBoundariesExcluding[i],
+				fill: false,
+				borderColor: colors[i % colors.length],
+				tension: 0,
+			})),
+		];
+	} else {
+		// The checkbox is not checked, show the real boundaries
+		chart.data.datasets = [
+			{
+				label: "User Results",
+				data: userPercent,
+				fill: false,
+				borderColor: "black",
+				tension: 0,
+			},
+			...grades.map((grade, i) => ({
+				label: grade,
+				data: data[i],
+				fill: false,
+				borderColor: colors[i % colors.length],
+				tension: 0,
+			})),
+		];
+	}
+	chart.update();
+});
+
+document.getElementById("exclude2020and2021").addEventListener("change", function () {
+	var excludeYears = [2020, 2021];
+	if (this.checked) {
+		// The checkbox is checked, exclude the data for 2020 and 2021
+		var yearIndices = excludeYears.map((year) => years.indexOf(year));
+		var filteredData = data.map((gradeData) => gradeData.filter((_, index) => !yearIndices.includes(index)));
+		var filteredYears = years.filter((year) => !excludeYears.includes(year));
+		chart.data.labels = filteredYears;
+		chart.data.datasets = [
+			{
+				label: "User Results",
+				data: userPercent.filter((_, index) => !yearIndices.includes(index)),
+				fill: false,
+				borderColor: "black",
+				tension: 0,
+			},
+			...grades.map((grade, i) => ({
+				label: grade,
+				data: filteredData[i],
+				fill: false,
+				borderColor: colors[i % colors.length],
+				tension: 0,
+			})),
+		];
+	} else {
+		// The checkbox is not checked, include all data
+		chart.data.labels = years;
+		chart.data.datasets = [
+			{
+				label: "User Results",
+				data: userPercent,
+				fill: false,
+				borderColor: "black",
+				tension: 0,
+			},
+			...grades.map((grade, i) => ({
+				label: grade,
+				data: data[i],
+				fill: false,
+				borderColor: colors[i % colors.length],
+				tension: 0,
+			})),
+		];
+	}
+	chart.update();
 });

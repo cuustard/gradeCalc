@@ -33,7 +33,9 @@
                 <td><span id="examPercent"></span></td>
             </tr>
         </table>
+
         <hr>
+
         <p>Here, you can view the Total Percentage of your inputs and the corresponding grade for each year.</p>
         <table id="newTableId">
             <tr>
@@ -68,6 +70,10 @@
             </tr>
         </table>
         <hr>
+        <label for="averageBoundaries">Show Average Boundaries:</label>
+        <input type="checkbox" id="averageBoundaries" name="averageBoundaries">
+        <label for="exclude2020 and 2021">Exclude 2020 and 2021:</label>
+        <input type="checkbox" id="exclude2020and2021" name="exclude2020and2021">
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <canvas id="myChart"></canvas>
         <script src="gradeCalc.js"></script>
