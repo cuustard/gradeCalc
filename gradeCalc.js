@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 		if (chart) {
 			chart.data.datasets[0].data = [...userPercent];
-			chart.update();
+			chart.update("none");
 		}
 	}
 });
