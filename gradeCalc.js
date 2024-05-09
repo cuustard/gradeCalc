@@ -118,12 +118,26 @@ document.addEventListener("DOMContentLoaded", function () {
 				)}%`;
 			}
 			userPercent.push(parseFloat(totalPercent[year].textContent));
-			result[year].textContent = getGrade(overallGrade, year);
+			// result[year].textContent = getGrade(overallGrade, year); // Commented out this line
 		}
 		if (chart) {
 			chart.data.datasets[0].data = [...userPercent];
 			chart.update("none");
 		}
+		if (document.getElementById("exclude2020and2021").checked) {
+			// If the "exclude 2020 and 2021" checkbox is checked, filter the userPercent array
+			var excludeYears = [2020, 2021];
+			var yearIndices = excludeYears.map((year) => years.indexOf(year));
+			var filteredUserPercent = userPercent.filter((_, index) => !yearIndices.includes(index));
+
+			// Update the chart with the filtered userPercent array
+			chart.data.datasets[0].data = filteredUserPercent;
+		} else {
+			// If the "exclude 2020 and 2021" checkbox is not checked, update the chart with the full userPercent array
+			chart.data.datasets[0].data = userPercent;
+		}
+
+		chart.update("none");
 	}
 });
 
@@ -198,6 +212,9 @@ chart = new Chart(ctx, {
 	},
 	options: {
 		responsive: false,
+		animation: {
+			duration: 0,
+		},
 		plugins: {
 			legend: {
 				position: "top",
@@ -216,13 +233,21 @@ chart = new Chart(ctx, {
 	},
 });
 
-document.getElementById("averageBoundaries").addEventListener("change", function () {
-	if (this.checked) {
-		// The checkbox is checked, show the average boundaries
+function updateChart() {
+	var excludeYears = [2020, 2021];
+	var yearIndices = excludeYears.map((year) => years.indexOf(year));
+	var filteredYears = years.filter((year) => !excludeYears.includes(year));
+	var filteredUserPercent = userPercent.filter((_, index) => !yearIndices.includes(index));
+	var filteredData = data.map((gradeData) => gradeData.filter((_, index) => !yearIndices.includes(index)));
+	var averageBoundariesChecked = document.getElementById("averageBoundaries").checked;
+	var exclude2020and2021Checked = document.getElementById("exclude2020and2021").checked;
+
+	if (averageBoundariesChecked && exclude2020and2021Checked) {
+		chart.data.labels = filteredYears;
 		chart.data.datasets = [
 			{
 				label: "User Results",
-				data: userPercent,
+				data: filteredUserPercent,
 				fill: false,
 				borderColor: "black",
 				tension: 0,
@@ -235,8 +260,8 @@ document.getElementById("averageBoundaries").addEventListener("change", function
 				tension: 0,
 			})),
 		];
-	} else {
-		// The checkbox is not checked, show the real boundaries
+	} else if (averageBoundariesChecked) {
+		chart.data.labels = years;
 		chart.data.datasets = [
 			{
 				label: "User Results",
@@ -247,28 +272,18 @@ document.getElementById("averageBoundaries").addEventListener("change", function
 			},
 			...grades.map((grade, i) => ({
 				label: grade,
-				data: data[i],
+				data: averageGradeBoundaries[i],
 				fill: false,
 				borderColor: colors[i % colors.length],
 				tension: 0,
 			})),
 		];
-	}
-	chart.update();
-});
-
-document.getElementById("exclude2020and2021").addEventListener("change", function () {
-	var excludeYears = [2020, 2021];
-	if (this.checked) {
-		// The checkbox is checked, exclude the data for 2020 and 2021
-		var yearIndices = excludeYears.map((year) => years.indexOf(year));
-		var filteredData = data.map((gradeData) => gradeData.filter((_, index) => !yearIndices.includes(index)));
-		var filteredYears = years.filter((year) => !excludeYears.includes(year));
+	} else if (exclude2020and2021Checked) {
 		chart.data.labels = filteredYears;
 		chart.data.datasets = [
 			{
 				label: "User Results",
-				data: userPercent.filter((_, index) => !yearIndices.includes(index)),
+				data: filteredUserPercent,
 				fill: false,
 				borderColor: "black",
 				tension: 0,
@@ -282,7 +297,6 @@ document.getElementById("exclude2020and2021").addEventListener("change", functio
 			})),
 		];
 	} else {
-		// The checkbox is not checked, include all data
 		chart.data.labels = years;
 		chart.data.datasets = [
 			{
@@ -302,4 +316,7 @@ document.getElementById("exclude2020and2021").addEventListener("change", functio
 		];
 	}
 	chart.update();
-});
+}
+
+document.getElementById("averageBoundaries").addEventListener("change", updateChart);
+document.getElementById("exclude2020and2021").addEventListener("change", updateChart);
