@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	courseWorkInput.addEventListener("input", calculateGrade);
 	examInput.addEventListener("input", calculateGrade);
 
-	["2017", "2018", "2019", "2020", "2021", "2022", "2023"].forEach((year) => {
+	["2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024"].forEach((year) => {
 		result[year] = document.getElementById(`result${year}`);
 		courseWorkPercent[year] = document.getElementById(`courseWorkPercent${year}`);
 		examPercent[year] = document.getElementById(`examPercent${year}`);
@@ -85,6 +85,15 @@ document.addEventListener("DOMContentLoaded", function () {
 			{ min: 85, grade: "E" },
 			{ min: 0, grade: "U" },
 		],
+		2024: [
+			{ min: 292, grade: "A*" },
+			{ min: 256, grade: "A" },
+			{ min: 215, grade: "B" },
+			{ min: 174, grade: "C" },
+			{ min: 133, grade: "D" },
+			{ min: 93, grade: "E" },
+			{ min: 0, grade: "U" },
+		],
 	};
 
 	calculateGrade();
@@ -143,16 +152,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // PLOTTING
 // Define the data directly in JavaScript
-var years = [2017, 2018, 2019, 2020, 2021, 2022, 2023];
+var years = [2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024];
 var grades = ["A*", "A", "B", "C", "D", "E", "U"];
 var data = [
-	[81.14, 78.86, 81.43, 72.14, 68.21, 75.43, 81.71],
-	[70.29, 68.0, 71.43, 61.07, 58.93, 65.43, 71.71],
-	[59.43, 57.71, 60.57, 49.64, 48.21, 54.0, 59.71],
-	[48.86, 47.71, 49.71, 38.21, 37.5, 42.86, 47.71],
-	[38.29, 37.71, 39.14, 27.14, 26.79, 31.71, 36.0],
-	[27.71, 27.71, 28.57, 16.07, 16.07, 20.57, 24.29],
-	[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+	[81.14, 78.86, 81.43, 72.14, 68.21, 75.43, 81.71, 83.43],
+	[70.29, 68.0, 71.43, 61.07, 58.93, 65.43, 71.71, 73.14],
+	[59.43, 57.71, 60.57, 49.64, 48.21, 54.0, 59.71, 61.43],
+	[48.86, 47.71, 49.71, 38.21, 37.5, 42.86, 47.71, 49.71],
+	[38.29, 37.71, 39.14, 27.14, 26.79, 31.71, 36.0, 38.0],
+	[27.71, 27.71, 28.57, 16.07, 16.07, 20.57, 24.29, 26.57],
+	[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
 ];
 
 function calculateAverageGradeBoundaries(data) {
